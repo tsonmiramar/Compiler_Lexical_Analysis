@@ -108,6 +108,26 @@ BOOLEAN   (true|false)
 "uvec4"     { return T_Uvec4;}
 {BOOLEAN}	{yylval.boolConstant = (yytext[0] == 't');
 		 return T_BoolConstant;}
+
+ /* punctuation and single-char operator */
+"+"		{ return T_AddAssign; }
+"-"		{ return T_SubAssign; }
+"*"		{ return T_MulAssign; }
+"/"		{ return T_DivAssign; }
+"<"		{ return T_LeftAngle; }
+">"		{ return T_RightAngle; }
+"("		{ return T_LeftParen; } 
+")"		{ return T_RightParen;}
+"["		{ return T_LeftBracket; }
+"]"		{ return T_RightBracket; }
+"{"		{ return T_LeftBrace; }
+"}"		{ return T_RightBrace; }
+"."		{ return T_Dot; }
+":"		{ return T_Colon; }
+";"		{ return T_Semicolon; }
+"="		{ return T_Equal; }
+"?"		{ return T_Question; }
+
 %%
 
 /* The closing %% above marks the end of the Rules section and the beginning
