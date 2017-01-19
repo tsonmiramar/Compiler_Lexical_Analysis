@@ -65,8 +65,10 @@ BOOLEAN   (true|false)
   * %% markers which delimit the Rules section. 
   */ 
 
-
+ /* Skipping white space but keep tracking the column number */
 [\n]		{currentLineNum++; currentColNum = 1;}
+[\t]		{currentColNum+=3;}
+" "		{ }
 
  /* Reserved Keyword */
 "void" 		{ return T_Void; }
@@ -75,8 +77,11 @@ BOOLEAN   (true|false)
 "break"		{ return T_Break;}
 "continue"	{ return T_Continue;}
 "do"		{ return T_Do;}
-(for)		{ return T_For;}
+"for"		{ return T_For;}
 "while"		{ return T_While;}
+"switch"	{ return T_Switch;}
+"case"		{ return T_Case;}
+"default"	{ return T_Default;}
 "if"		{ return T_If;}
 "else"		{ return T_Else;}
 "in"		{ return T_In;}
