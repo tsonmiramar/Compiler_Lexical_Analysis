@@ -106,6 +106,14 @@ BOOLEAN   (true|false)
 "uvec2"     { return T_Uvec2;}
 "uvec3"     { return T_Uvec3;}
 "uvec4"     { return T_Uvec4;}
+"!="        { return T_NE;}
+"--"        { return T_Dec;}
+"++"        { return T_Inc;}
+"<="        { return T_LessEqual;}
+">="        { return T_GreaterEqual;}
+"=="        { return T_EQ;}
+"&&"        { return T_And;}
+"||"        { return T_Or;}
 {BOOLEAN}	{yylval.boolConstant = (yytext[0] == 't');
 		 return T_BoolConstant;}
 
