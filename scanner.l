@@ -139,6 +139,19 @@ BOOLEAN   (true|false)
 "="		{ return T_Equal; }
 "?"		{ return T_Question; }
 
+ /* int, float, boolean constant */
+{BOOLEAN}       {yylval.boolConstant = (yytext[0] == 't');
+                 return T_BoolConstant;}
+
+[-][1-9]+	{yylval.integerConstant = atoi(yytext);
+		 return T_IntConstant;}
+
+[1-9]+		{yylval.integerConstant = atoi(yytext);
+		 return T_UintConstant;}
+
+[1-9]+\.[1-9]+	{yylval.floatConstant = atof(yytext);
+		 return T_FloatConstant;}
+
 %%
 
 /* The closing %% above marks the end of the Rules section and the beginning
