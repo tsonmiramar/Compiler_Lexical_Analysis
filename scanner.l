@@ -83,7 +83,11 @@ BOOLEAN   (true|false)
 "out"		{ return T_Out;}
 "float"		{ return T_Float;}
 "int"		{ return T_Int; }
-
+"bool"		{ return T_Bool; }
+"return"	{ return T_Return;}
+"mat2"		{ return T_Mat2;}
+"mat3"		{ return T_Mat3;}
+"mat4"		{ return T_Mat4;}
 
 {BOOLEAN}	{yylval.boolConstant = (yytext[0] == 't');
 		 return T_BoolConstant;}
