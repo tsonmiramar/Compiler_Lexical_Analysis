@@ -119,12 +119,16 @@ BOOLEAN   (true|false)
 "=="        { return T_EQ;}
 "&&"        { return T_And;}
 "||"        { return T_Or;}
+"*="	    { return T_MulAssign; }
+"/="	    { return T_DivAssign; }
+"+="	    { return T_AddAssign; }
+"-="	    { return T_SubAssign; }
 
  /* punctuation and single-char operator */
-"+"		{ return T_AddAssign; }
-"-"		{ return T_SubAssign; }
-"*"		{ return T_MulAssign; }
-"/"		{ return T_DivAssign; }
+"+"		{ return T_Plus; }
+"-"		{ return T_Dash; }
+"*"		{ return T_Star; }
+"/"		{ return T_Slash; }
 "<"		{ return T_LeftAngle; }
 ">"		{ return T_RightAngle; }
 "("		{ return T_LeftParen; } 
@@ -143,7 +147,7 @@ BOOLEAN   (true|false)
 (true|false)       {yylval.boolConstant = (yytext[0] == 't');
                  return T_BoolConstant;}
 
-[-][0-9]+	{yylval.integerConstant = atoi(yytext);
+[0-9]+		{yylval.integerConstant = atoi(yytext);
 		 return T_IntConstant;}
 
 [0-9]+		{yylval.integerConstant = atoi(yytext);
