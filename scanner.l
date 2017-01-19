@@ -85,12 +85,24 @@ BOOLEAN   (true|false)
 "out"		{ return T_Out;}
 "float"		{ return T_Float;}
 "int"		{ return T_Int; }
-"bool"		{ return T_Bool; }
-"return"	{ return T_Return;}
-"mat2"		{ return T_Mat2;}
-"mat3"		{ return T_Mat3;}
-"mat4"		{ return T_Mat4;}
-
+"bool"      { return T_Bool;}
+"return"    { return T_Return;}
+"mat2"      { return T_Mat2; }
+"mat3"      { return T_Mat3; }
+"mat4"      { return T_Mat4; }
+"vec2"      { return T_Vec2;}
+"vec3"      { return T_Vec3;}
+"vec4"      { return T_Vec4;}
+"ivec2"     { return T_Ivec2;}
+"ivec3"     { return T_Ivec3;}
+"ivec4"     { return T_Ivec4;}
+"bvec2"     { return T_Bvec2;}
+"bvec3"     { return T_Bvec3;}
+"bvec4"     { return T_Bvec4;}
+"unit"      { return T_Uint;}
+"uvec2"     { return T_Uvec2;}
+"uvec3"     { return T_Uvec3;}
+"uvec4"     { return T_Uvec4;}
 {BOOLEAN}	{yylval.boolConstant = (yytext[0] == 't');
 		 return T_BoolConstant;}
 %%
