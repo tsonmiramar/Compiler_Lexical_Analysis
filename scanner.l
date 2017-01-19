@@ -67,7 +67,7 @@ BOOLEAN   (true|false)
 
  /* Skipping white space but keep tracking the column number */
 [\n]		{currentLineNum++; currentColNum = 1;}
-[\t]		{ }
+[\t]		{currentColNum+=3;}
 " "		{ }
 
  /* Reserved Keyword */
@@ -79,6 +79,9 @@ BOOLEAN   (true|false)
 "do"		{ return T_Do;}
 "for"		{ return T_For;}
 "while"		{ return T_While;}
+"switch"	{ return T_Switch;}
+"case"		{ return T_Case;}
+"default"	{ return T_Default;}
 "if"		{ return T_If;}
 "else"		{ return T_Else;}
 "in"		{ return T_In;}
