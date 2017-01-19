@@ -11,7 +11,7 @@
  * or C++ variable declarations/prototypes that are needed by your code here.
  */
 
-#include <string.h>
+#include "string.h"
 #include "scanner.h"
 #include "utility.h" // for PrintDebug()
 #include "errors.h"
@@ -140,18 +140,21 @@ BOOLEAN   (true|false)
 "?"		{ return T_Question; }
 
  /* int, float, boolean constant */
-{BOOLEAN}       {yylval.boolConstant = (yytext[0] == 't');
+(true|false)       {yylval.boolConstant = (yytext[0] == 't');
                  return T_BoolConstant;}
 
-[-][1-9]+	{yylval.integerConstant = atoi(yytext);
+[-][0-9]+	{yylval.integerConstant = atoi(yytext);
 		 return T_IntConstant;}
 
-[1-9]+		{yylval.integerConstant = atoi(yytext);
+[0-9]+		{yylval.integerConstant = atoi(yytext);
 		 return T_UintConstant;}
 
-[1-9]+\.[1-9]+	{yylval.floatConstant = atof(yytext);
+[0-9]+\.[0-9]+	{yylval.floatConstant = atof(yytext);
 		 return T_FloatConstant;}
 
+ /* Identifier */
+[a-zA-Z][a-zA-Z0-9)]* { if ( yyleng > MaxIdentLen ) ReportError::LongIdentifier(&yylloc,yytext);
+		    else{ strncpy(yylval.identifier,yytext,MaxIdentLen); return T_Identifier; } }
 %%
 
 /* The closing %% above marks the end of the Rules section and the beginning
