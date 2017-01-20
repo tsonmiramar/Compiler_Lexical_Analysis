@@ -67,8 +67,18 @@ BOOLEAN   (true|false)
 
  /* Skipping white space but keep tracking the column number */
 [\n]		{currentLineNum++; currentColNum = 1;}
-[\t]		{currentColNum+=3;}
+[\t]		{currentColNum+=7;}
 " "		{ }
+
+ /* Skipping comments */
+"//"(.*)$	{ }
+
+"/*"			{BEGIN(ML_COMMENT);}
+<ML_COMMENT>"*/"	{BEGIN(INITIAL);}
+<ML_COMMENT>[^*\n]+ 	{ }
+<ML_COMMENT>\n		{currentLineNum++;}
+<ML_COMMENT>"*"		{ }
+<ML_COMMENT><<EOF>>	{ReportError::UntermComment();yyterminate();}
 
  /* Reserved Keyword */
 "void" 		{ return T_Void; }
@@ -107,9 +117,6 @@ BOOLEAN   (true|false)
 "uvec3"     { return T_Uvec3;}
 "uvec4"     { return T_Uvec4;}
 
-{BOOLEAN}       {yylval.boolConstant = (yytext[0] == 't');
-                 return T_BoolConstant;}
-
  /* 2-characters operator */
 "!="        { return T_NE;}
 "--"        { return T_Dec;}
@@ -147,17 +154,18 @@ BOOLEAN   (true|false)
 (true|false)       {yylval.boolConstant = (yytext[0] == 't');
                  return T_BoolConstant;}
 
-[0-9]+		{yylval.integerConstant = atoi(yytext);
+[1-9][0-9]*	{yylval.integerConstant = atoi(yytext);
 		 return T_IntConstant;}
 
-[0-9]+		{yylval.integerConstant = atoi(yytext);
+[1-9][0-9]*(u|U) {char* suffix; yylval.integerConstant = strtoul(yytext,&suffix,10);
 		 return T_UintConstant;}
 
-[0-9]+\.[0-9]+	{yylval.floatConstant = atof(yytext);
-		 return T_FloatConstant;}
+	
+[0-9]+\.[0-9]+((e|E)(\+|\-)?[0-9]+)?(f|F)?	{sscanf(yytext,"%f",&yylval.floatConstant);
+		 	return T_FloatConstant;}
 
  /* Identifier */
-[a-zA-Z][a-zA-Z0-9)]* { if ( yyleng > MaxIdentLen ) ReportError::LongIdentifier(&yylloc,yytext);
+[a-zA-Z_][a-zA-Z0-9_]* { if ( yyleng > MaxIdentLen ) ReportError::LongIdentifier(&yylloc,yytext);
 		    else{ strncpy(yylval.identifier,yytext,MaxIdentLen); return T_Identifier; } }
 %%
 
