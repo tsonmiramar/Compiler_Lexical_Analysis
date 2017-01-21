@@ -60,6 +60,8 @@ int currentLineNum, currentColNum;
 BOOLEAN   (true|false)
 
 %x ML_COMMENT
+%x IDENTIFIER
+%x FIELD_SELECTION
 %%             /* BEGIN RULES SECTION */
  /* All patterns and actions should be placed between the start and stop
   * %% markers which delimit the Rules section. 
@@ -144,7 +146,7 @@ BOOLEAN   (true|false)
 "]"		{ return T_RightBracket; }
 "{"		{ return T_LeftBrace; }
 "}"		{ return T_RightBrace; }
-"."		{ return T_Dot; }
+"."		{ BEGIN(FIELD_SELECTION); return T_Dot; }
 ":"		{ return T_Colon; }
 ";"		{ return T_Semicolon; }
 "="		{ return T_Equal; }
@@ -165,8 +167,25 @@ BOOLEAN   (true|false)
 		 	return T_FloatConstant;}
 
  /* Identifier */
-[a-zA-Z_][a-zA-Z0-9_]* { if ( yyleng > MaxIdentLen ) ReportError::LongIdentifier(&yylloc,yytext);
-		    else{ strncpy(yylval.identifier,yytext,MaxIdentLen); return T_Identifier; } }
+[a-zA-Z_][a-zA-Z0-9_]*  { if ( yyleng > 1023 ){
+			 	ReportError::LongIdentifier(&yylloc,yytext);
+				strncpy(yylval.identifier,yytext,1023);
+			 }
+			 else if ( yyleng > MaxIdentLen )
+				strncpy(yylval.identifier,yytext,MaxIdentLen);
+			 else
+				strncpy(yylval.identifier,yytext,yyleng);
+			 return T_Identifier;
+			}
+
+<FIELD_SELECTION>[a-zA-Z_][a-zA-Z0-9_]*	{ BEGIN(INITIAL);
+					  if ( yyleng > 1023 ){
+						ReportError::LongIdentifier(&yyloc,yytext);
+						strncpy(yylval.identifier,yytext,1023); 
+					  } else if ( yyleng > MaxIdentLen ){
+						strncpy(yylval.identifier,yytext,MaxIdentLen);
+					  strnreturn T_FieldSelection; 
+					 }
 %%
 
 /* The closing %% above marks the end of the Rules section and the beginning
