@@ -156,6 +156,8 @@ BOOLEAN   (true|false)
 (true|false)       {yylval.boolConstant = (yytext[0] == 't');
                  return T_BoolConstant;}
 
+[0]+		{yylval.integerConstant = atoi(yytext); return T_IntConstant;}
+
 [1-9][0-9]*	{yylval.integerConstant = atoi(yytext);
 		 return T_IntConstant;}
 
@@ -169,23 +171,18 @@ BOOLEAN   (true|false)
  /* Identifier */
 [a-zA-Z_][a-zA-Z0-9_]*  { if ( yyleng > 1023 ){
 			 	ReportError::LongIdentifier(&yylloc,yytext);
-				strncpy(yylval.identifier,yytext,1023);
-			 }
-			 else if ( yyleng > MaxIdentLen )
-				strncpy(yylval.identifier,yytext,MaxIdentLen);
-			 else
-				strncpy(yylval.identifier,yytext,yyleng);
-			 return T_Identifier;
+			  }
+			  strncpy(yylval.identifier,yytext,MaxIdentLen+1);
+			  return T_Identifier;
 			}
 
 <FIELD_SELECTION>[a-zA-Z_][a-zA-Z0-9_]*	{ BEGIN(INITIAL);
 					  if ( yyleng > 1023 ){
-						ReportError::LongIdentifier(&yyloc,yytext);
-						strncpy(yylval.identifier,yytext,1023); 
-					  } else if ( yyleng > MaxIdentLen ){
-						strncpy(yylval.identifier,yytext,MaxIdentLen);
-					  strnreturn T_FieldSelection; 
-					 }
+						ReportError::LongIdentifier(&yylloc,yytext);
+					  }
+					  strncpy(yylval.identifier,yytext,MaxIdentLen+1);
+					  return T_FieldSelection; 
+					}
 %%
 
 /* The closing %% above marks the end of the Rules section and the beginning
