@@ -69,8 +69,8 @@ BOOLEAN   (true|false)
 
  /* Skipping white space but keep tracking the column number */
 [\n]		{currentLineNum++; currentColNum = 1;}
-[\t]		{currentColNum+=7;}
-" "		{ }
+[\t]		{currentColNum+=8 - currentColNum%8 + 1;}
+[ ]+		{ }
 
  /* Skipping comments */
 "//"(.*)$	{ }
@@ -183,7 +183,7 @@ BOOLEAN   (true|false)
 					  strncpy(yylval.identifier,yytext,MaxIdentLen+1);
 					  return T_FieldSelection; 
 					}
-<FIELD_SELECTION>[\t\r] {}
+<FIELD_SELECTION>[\t\r\n ] { BEGIN(INITIAL);}
  /* Default error */
 .		{ ReportError::UnrecogChar(&yylloc,yytext[0]); }
 
