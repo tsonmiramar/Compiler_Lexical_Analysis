@@ -80,7 +80,7 @@ BOOLEAN   (true|false)
 <ML_COMMENT>[^*\n]+ 	{ }
 <ML_COMMENT>\n		{currentLineNum++;}
 <ML_COMMENT>"*"		{ }
-<ML_COMMENT><<EOF>>	{ReportError::UntermComment();yyterminate();}
+<ML_COMMENT><<EOF>>	{ReportError::UntermComment();yyterminate(); return 0;}
 
  /* Reserved Keyword */
 "void" 		{ return T_Void; }
@@ -165,7 +165,7 @@ BOOLEAN   (true|false)
 		 return T_UintConstant;}
 
 	
-[0-9]+\.[0-9]+((e|E)(\+|\-)?[0-9]+)?(f|F)?	{sscanf(yytext,"%f",&yylval.floatConstant);
+([0-9]+)?\.[0-9]+((e|E)(\+|\-)?[0-9]+)?(f|F)?	{sscanf(yytext,"%f",&yylval.floatConstant);
 		 	return T_FloatConstant;}
 
  /* Identifier */
@@ -183,6 +183,10 @@ BOOLEAN   (true|false)
 					  strncpy(yylval.identifier,yytext,MaxIdentLen+1);
 					  return T_FieldSelection; 
 					}
+<FIELD_SELECTION>[\t\r] {}
+ /* Default error */
+.		{ ReportError::UnrecogChar(&yylloc,yytext[0]); }
+
 %%
 
 /* The closing %% above marks the end of the Rules section and the beginning
