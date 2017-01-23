@@ -1,0 +1,20 @@
+Son Do sdo@ucsd.edu
+Tuan Dang tad003@ucsd.edu
+
+
+In this Project, we implemented the file scanner.l to create a scanner for 
+GLSL programing language. It will transform the soure file from a stream of bits
+and bytes into a series of meaningful tokens containing information.
+There are some goals we need to do:
+
+- Skip over white space
+- Recognize all keywords and return the correct token
+- recognize punctuation and single-char, two character operators, 
+recognize int, float, and bool constants, recognize identifiers
+
+All lexeme require to track the current line and columns numbers and
+we have to update the scanner reads the file
+
+There are handling errors like for checking report lexial errors for lengthly
+identifiers and invalid characters, then it will report the error
+
