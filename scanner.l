@@ -165,7 +165,7 @@ BOOLEAN   (true|false)
 		 return T_UintConstant;}
 
 	
-([0-9]+)?\.[0-9]+((e|E)(\+|\-)?[0-9]+)?(f|F)?	{sscanf(yytext,"%f",&yylval.floatConstant);
+([0-9]+)?[\.]?[0-9]+((e|E)(\+|\-)?[0-9]+)?(f|F)?	{sscanf(yytext,"%f",&yylval.floatConstant);
 		 	return T_FloatConstant;}
 
  /* Identifier */
